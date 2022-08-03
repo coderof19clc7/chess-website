@@ -1,0 +1,38 @@
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #aaa;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+:root {
+  --theme:         dark;
+  --pri1: 186, 120,  72;
+  --pri2: 255, 211, 138;
+  --back:  50,  53,  59;
+  --fore: 255, 255, 255;
+  --dark-square: 186, 120,  72;
+  --light-square: 255, 192, 147;
+}
+* {
+  font-family: Roboto, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+::selection {
+  background-color: #c97c56;
+  color: #fff;
+  text-shadow: none;
+}
+a {
+  color: inherit !important;
+}
