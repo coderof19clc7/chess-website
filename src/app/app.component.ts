@@ -9,6 +9,8 @@ import {
     PieceTypeInput
 } from 'ngx-chess-board/src/lib/utils/inputs/piece-type-input';
 import { FenComponent } from './components/fen/fen.component';
+import { io } from "socket.io-client";
+
 
 @Component({
     selector: 'app-root',
@@ -18,6 +20,7 @@ import { FenComponent } from './components/fen/fen.component';
 export class AppComponent {
     @ViewChild('board')
     boardManager: NgxChessBoardComponent;
+
 
     @ViewChild('fenManager') fenManager: FenComponent;
     public fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -44,12 +47,31 @@ export class AppComponent {
     public dragDisabled = false;
     public drawDisabled = false;
     public lightDisabled = false;
-    public darkDisabled = false;
+    public darkDisabled = true;
     public freeMode = false;
     public addPieceCoords: string = 'a4';
     public selectedPiece = '1';
     public selectedColor = '1';
     public pgn: string = '';
+    socket:any;
+    // public socket = io("http://localhost:3000")
+
+    async ngOnInit() {
+        this.socket = io("http://localhost:3000");
+        this.socket.on("connect", () => {
+        });
+
+
+        this.socket.on("black-moved", async (message) => {
+            this.boardManager.setFEN(message);
+        })
+
+        this.socket.on("end_game", async (message) => {
+            if(message.status) {
+                alert("You close!")
+            }
+        })
+    }
 
     public reset(): void {
         alert('Resetting board');
@@ -73,10 +95,13 @@ export class AppComponent {
         }
     }
 
-    public moveCallback(move: MoveChange): void {
+    public moveCallback(move: any): void {
         this.fen = this.boardManager.getFEN();
         this.pgn = this.boardManager.getPGN();
-        console.log(move);
+        if(move.color == "white") {
+            this.socket.emit("white-move", move.move[0]+ move.move[1], move.move[2]+ move.move[3]);
+        }
+        this.socket.emit("check_status")
     }
 
     public moveManual(): void {

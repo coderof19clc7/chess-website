@@ -38,6 +38,7 @@ export class MovesComponent {
     }
 
     private set blackMoves(moves: string[]) {
+        // console.log("moves: " + typeof moves);
         this.blackMovesSubject$.next(moves);
     }
 
